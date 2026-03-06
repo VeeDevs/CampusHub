@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../config/prisma";
 import { authGuard } from "../../middleware/auth";
@@ -27,8 +27,9 @@ itemsRouter.post("/", authGuard, validate(itemSchema), async (req, res) => {
 });
 
 itemsRouter.patch("/:id", authGuard, async (req, res) => {
+  const itemId = String(req.params.id);
   const item = await prisma.item.updateMany({
-    where: { id: req.params.id, sellerId: req.user!.userId },
+    where: { id: itemId, sellerId: req.user!.userId },
     data: req.body
   });
   res.json(item);

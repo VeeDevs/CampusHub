@@ -94,7 +94,7 @@ export default function JobsPage() {
         {jobs.map((j) => (
           <article key={j.id} className="rounded-xl bg-white p-5 shadow-soft">
             <h2 className="text-xl font-semibold">{j.title}</h2>
-            <p className="text-slate-600">{j.company} • {j.location} • {j.type}</p>
+            <p className="text-slate-600">{j.company} â€¢ {j.location} â€¢ {j.type}</p>
             <p className="mt-2 text-sm text-slate-600">{j.description}</p>
             <div className="mt-3 flex items-center justify-between">
               <p className="font-semibold">${j.pay} / hr</p>

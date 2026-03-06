@@ -1,4 +1,4 @@
-﻿export default function UniversitiesPage() {
+export default function UniversitiesPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
       <h1 className="text-4xl font-bold">Partner Universities</h1>

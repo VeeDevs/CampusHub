@@ -1,4 +1,4 @@
-﻿import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 
 export type JwtPayload = {
@@ -7,7 +7,9 @@ export type JwtPayload = {
 };
 
 export function signToken(payload: JwtPayload): string {
-  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+  return jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"]
+  });
 }
 
 export function verifyToken(token: string): JwtPayload {

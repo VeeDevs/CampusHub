@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "campushub",
   "private": true,
   "version": "1.0.0",
@@ -15,6 +15,8 @@
     "db:migrate": "npm run prisma:migrate --workspace backend"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "c12": "^3.1.0",
+    "concurrently": "^9.1.2",
+    "effect": "^3.18.4"
   }
 }

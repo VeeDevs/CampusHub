@@ -48,28 +48,28 @@ export default function SearchPage() {
         <section className="rounded-xl bg-white p-5 shadow-soft">
           <h2 className="mb-3 text-lg font-semibold">Services ({results.services.length})</h2>
           <ul className="space-y-2 text-sm">
-            {results.services.map((s) => <li key={s.id}>{s.title} • ${s.price} • {s.university}</li>)}
+            {results.services.map((s) => <li key={s.id}>{s.title} â€¢ ${s.price} â€¢ {s.university}</li>)}
           </ul>
         </section>
 
         <section className="rounded-xl bg-white p-5 shadow-soft">
           <h2 className="mb-3 text-lg font-semibold">Items ({results.items.length})</h2>
           <ul className="space-y-2 text-sm">
-            {results.items.map((i) => <li key={i.id}>{i.title} • ${i.price} • {i.university}</li>)}
+            {results.items.map((i) => <li key={i.id}>{i.title} â€¢ ${i.price} â€¢ {i.university}</li>)}
           </ul>
         </section>
 
         <section className="rounded-xl bg-white p-5 shadow-soft">
           <h2 className="mb-3 text-lg font-semibold">Notes ({results.notes.length})</h2>
           <ul className="space-y-2 text-sm">
-            {results.notes.map((n) => <li key={n.id}>{n.title} • ${n.price} • {n.university}</li>)}
+            {results.notes.map((n) => <li key={n.id}>{n.title} â€¢ ${n.price} â€¢ {n.university}</li>)}
           </ul>
         </section>
 
         <section className="rounded-xl bg-white p-5 shadow-soft">
           <h2 className="mb-3 text-lg font-semibold">Jobs ({results.jobs.length})</h2>
           <ul className="space-y-2 text-sm">
-            {results.jobs.map((j) => <li key={j.id}>{j.title} • {j.company} • ${j.pay}</li>)}
+            {results.jobs.map((j) => <li key={j.id}>{j.title} â€¢ {j.company} â€¢ ${j.pay}</li>)}
           </ul>
         </section>
       </div>

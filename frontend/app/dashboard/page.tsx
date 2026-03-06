@@ -1,4 +1,4 @@
-﻿import { AppShell } from "@/components/app-shell";
+import { AppShell } from "@/components/app-shell";
 import { API_URL } from "@/lib/api";
 
 async function getStats() {

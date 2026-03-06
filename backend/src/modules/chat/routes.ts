@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { prisma } from "../../config/prisma";
 import { authGuard } from "../../middleware/auth";
 
@@ -29,8 +29,9 @@ chatRouter.post("/", authGuard, async (req, res) => {
 });
 
 chatRouter.post("/:chatId/messages", authGuard, async (req, res) => {
+  const chatId = String(req.params.chatId);
   const participant = await prisma.chatParticipant.findUnique({
-    where: { chatId_userId: { chatId: req.params.chatId, userId: req.user!.userId } }
+    where: { chatId_userId: { chatId, userId: req.user!.userId } }
   });
 
   if (!participant) {
@@ -40,7 +41,7 @@ chatRouter.post("/:chatId/messages", authGuard, async (req, res) => {
 
   const message = await prisma.message.create({
     data: {
-      chatId: req.params.chatId,
+      chatId,
       senderId: req.user!.userId,
       message: String(req.body.message ?? "")
     }

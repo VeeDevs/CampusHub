@@ -66,7 +66,7 @@ export default function FeedPage() {
           <article key={post.id} className="rounded-xl bg-white p-5 shadow-soft">
             <p>{post.content}</p>
             <div className="mt-3 flex items-center justify-between">
-              <p className="text-xs text-slate-500">Likes: {post.likes} • Comments: {post.comments?.length ?? 0}</p>
+              <p className="text-xs text-slate-500">Likes: {post.likes} â€¢ Comments: {post.comments?.length ?? 0}</p>
               <button className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm text-white" onClick={() => likePost(post.id)}>Like</button>
             </div>
           </article>

@@ -1,4 +1,4 @@
-﻿export default function PricingPage() {
+export default function PricingPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
       <h1 className="text-4xl font-bold">Startup Pricing</h1>

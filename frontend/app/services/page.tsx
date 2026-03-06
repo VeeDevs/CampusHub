@@ -88,7 +88,7 @@ export default function ServicesPage() {
           <article key={s.id} className="rounded-xl bg-white p-5 shadow-soft">
             <h2 className="font-semibold">{s.title}</h2>
             <p className="mt-1 text-sm text-slate-600">{s.description}</p>
-            <p className="mt-3 text-sm">{s.category} • {s.university}</p>
+            <p className="mt-3 text-sm">{s.category} â€¢ {s.university}</p>
             <div className="mt-3 flex items-center justify-between">
               <p className="font-semibold">${s.price}</p>
               <button className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm text-white" onClick={() => bookService(s.id)}>

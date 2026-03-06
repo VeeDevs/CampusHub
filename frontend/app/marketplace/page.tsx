@@ -93,7 +93,7 @@ export default function MarketplacePage() {
           <article key={item.id} className="rounded-xl bg-white p-5 shadow-soft">
             <h2 className="font-semibold">{item.title}</h2>
             <p className="mt-1 text-sm text-slate-600">{item.description}</p>
-            <p className="mt-2 text-sm">{item.category} • {item.university} • {item.status}</p>
+            <p className="mt-2 text-sm">{item.category} â€¢ {item.university} â€¢ {item.status}</p>
             <p className="mt-1 font-semibold">${item.price}</p>
           </article>
         ))}

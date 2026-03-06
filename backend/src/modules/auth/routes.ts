@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import { prisma } from "../../config/prisma";

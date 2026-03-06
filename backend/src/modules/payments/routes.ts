@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import Stripe from "stripe";
 import { env } from "../../config/env";
 import { prisma } from "../../config/prisma";
@@ -41,8 +41,9 @@ paymentsRouter.post("/checkout", authGuard, async (req, res) => {
 });
 
 paymentsRouter.post("/:id/confirm", authGuard, async (req, res) => {
+  const transactionId = String(req.params.id);
   const tx = await prisma.transaction.update({
-    where: { id: req.params.id },
+    where: { id: transactionId },
     data: { status: "succeeded" }
   });
   res.json(tx);

@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../config/prisma";
 import { authGuard } from "../../middleware/auth";
@@ -27,27 +27,30 @@ servicesRouter.post("/", authGuard, validate(serviceSchema), async (req, res) =>
 });
 
 servicesRouter.patch("/:id", authGuard, async (req, res) => {
+  const serviceId = String(req.params.id);
   const updated = await prisma.service.updateMany({
-    where: { id: req.params.id, sellerId: req.user!.userId },
+    where: { id: serviceId, sellerId: req.user!.userId },
     data: req.body
   });
   res.json(updated);
 });
 
 servicesRouter.delete("/:id", authGuard, async (req, res) => {
-  await prisma.service.deleteMany({ where: { id: req.params.id, sellerId: req.user!.userId } });
+  const serviceId = String(req.params.id);
+  await prisma.service.deleteMany({ where: { id: serviceId, sellerId: req.user!.userId } });
   res.status(204).send();
 });
 
 servicesRouter.post("/:id/book", authGuard, async (req, res) => {
-  const service = await prisma.service.findUnique({ where: { id: req.params.id } });
+  const serviceId = String(req.params.id);
+  const service = await prisma.service.findUnique({ where: { id: serviceId } });
   if (!service) {
     res.status(404).json({ message: "Service not found" });
     return;
   }
 
   const booking = await prisma.serviceBooking.create({
-    data: { serviceId: req.params.id, studentId: req.user!.userId }
+    data: { serviceId, studentId: req.user!.userId }
   });
   await prisma.notification.create({
     data: {
@@ -60,9 +63,10 @@ servicesRouter.post("/:id/book", authGuard, async (req, res) => {
 });
 
 servicesRouter.post("/:id/reviews", authGuard, async (req, res) => {
+  const serviceId = String(req.params.id);
   const review = await prisma.serviceReview.create({
     data: {
-      serviceId: req.params.id,
+      serviceId,
       studentId: req.user!.userId,
       rating: Number(req.body.rating ?? 5),
       comment: String(req.body.comment ?? "")

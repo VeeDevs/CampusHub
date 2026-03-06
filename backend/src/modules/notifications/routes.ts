@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { prisma } from "../../config/prisma";
 import { authGuard } from "../../middleware/auth";
 
@@ -13,8 +13,9 @@ notificationsRouter.get("/", authGuard, async (req, res) => {
 });
 
 notificationsRouter.patch("/:id/read", authGuard, async (req, res) => {
+  const notificationId = String(req.params.id);
   const updated = await prisma.notification.updateMany({
-    where: { id: req.params.id, userId: req.user!.userId },
+    where: { id: notificationId, userId: req.user!.userId },
     data: { read: true }
   });
   res.json(updated);

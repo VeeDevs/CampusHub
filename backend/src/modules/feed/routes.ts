@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { prisma } from "../../config/prisma";
 import { authGuard } from "../../middleware/auth";
 
@@ -21,9 +21,10 @@ feedRouter.post("/", authGuard, async (req, res) => {
 });
 
 feedRouter.post("/:id/comments", authGuard, async (req, res) => {
+  const postId = String(req.params.id);
   const comment = await prisma.comment.create({
     data: {
-      postId: req.params.id,
+      postId,
       authorId: req.user!.userId,
       text: String(req.body.text ?? "")
     }
@@ -32,23 +33,24 @@ feedRouter.post("/:id/comments", authGuard, async (req, res) => {
 });
 
 feedRouter.post("/:id/like", authGuard, async (req, res) => {
+  const postId = String(req.params.id);
   const existingLike = await prisma.postLike.findUnique({
-    where: { postId_userId: { postId: req.params.id, userId: req.user!.userId } }
+    where: { postId_userId: { postId, userId: req.user!.userId } }
   });
 
   if (existingLike) {
-    const post = await prisma.post.findUnique({ where: { id: req.params.id } });
+    const post = await prisma.post.findUnique({ where: { id: postId } });
     res.json(post);
     return;
   }
 
   await prisma.postLike.create({
     data: {
-      postId: req.params.id,
+      postId,
       userId: req.user!.userId
     }
   });
 
-  const post = await prisma.post.update({ where: { id: req.params.id }, data: { likes: { increment: 1 } } });
+  const post = await prisma.post.update({ where: { id: postId }, data: { likes: { increment: 1 } } });
   res.json(post);
 });

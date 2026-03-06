@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import OpenAI from "openai";
 import { env } from "../../config/env";
 import { authGuard } from "../../middleware/auth";

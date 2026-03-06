@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../../config/prisma";
 import { authGuard, roleGuard } from "../../middleware/auth";
@@ -26,7 +26,8 @@ jobsRouter.post("/", authGuard, roleGuard(["business", "admin"]), validate(jobSc
 });
 
 jobsRouter.post("/:id/apply", authGuard, roleGuard(["student"]), async (req, res) => {
-  const job = await prisma.job.findUnique({ where: { id: req.params.id } });
+  const jobId = String(req.params.id);
+  const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) {
     res.status(404).json({ message: "Job not found" });
     return;

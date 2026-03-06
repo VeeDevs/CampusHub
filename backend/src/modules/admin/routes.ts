@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { prisma } from "../../config/prisma";
 import { authGuard, roleGuard } from "../../middleware/auth";
 
@@ -7,17 +7,19 @@ export const adminRouter = Router();
 adminRouter.use(authGuard, roleGuard(["admin"]));
 
 adminRouter.get("/analytics", async (_req, res) => {
-  const [totalUsers, totalTransactions, marketplaceActivity, revenue] = await Promise.all([
+  const [totalUsers, totalTransactions, itemCount, serviceCount, noteCount, revenue] = await Promise.all([
     prisma.user.count(),
     prisma.transaction.count(),
-    prisma.item.count() + prisma.service.count() + prisma.note.count(),
+    prisma.item.count(),
+    prisma.service.count(),
+    prisma.note.count(),
     prisma.transaction.aggregate({ _sum: { amount: true } })
   ]);
 
   res.json({
     totalUsers,
     totalTransactions,
-    marketplaceActivity,
+    marketplaceActivity: itemCount + serviceCount + noteCount,
     revenue: revenue._sum.amount ?? 0
   });
 });
@@ -28,7 +30,8 @@ adminRouter.get("/users", async (_req, res) => {
 });
 
 adminRouter.delete("/listings/:type/:id", async (req, res) => {
-  const { type, id } = req.params;
+  const type = String(req.params.type);
+  const id = String(req.params.id);
   if (type === "services") await prisma.service.delete({ where: { id } });
   else if (type === "items") await prisma.item.delete({ where: { id } });
   else if (type === "notes") await prisma.note.delete({ where: { id } });
@@ -40,6 +43,7 @@ adminRouter.delete("/listings/:type/:id", async (req, res) => {
 });
 
 adminRouter.delete("/posts/:id", async (req, res) => {
-  await prisma.post.delete({ where: { id: req.params.id } });
+  const postId = String(req.params.id);
+  await prisma.post.delete({ where: { id: postId } });
   res.status(204).send();
 });

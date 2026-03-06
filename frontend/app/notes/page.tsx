@@ -78,7 +78,7 @@ export default function NotesPage() {
         {notes.map((n) => (
           <article key={n.id} className="rounded-xl bg-white p-5 shadow-soft">
             <h2 className="font-semibold">{n.title}</h2>
-            <p className="text-sm text-slate-600">{n.course} • {n.university}</p>
+            <p className="text-sm text-slate-600">{n.course} â€¢ {n.university}</p>
             <p className="mt-2 text-sm">Downloads: {n.downloads}</p>
             <div className="mt-3 flex items-center justify-between">
               <p className="font-semibold">${n.price}</p>

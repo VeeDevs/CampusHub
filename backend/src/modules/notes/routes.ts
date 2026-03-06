@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import multer from "multer";
 import { z } from "zod";
 import { prisma } from "../../config/prisma";
@@ -37,7 +37,8 @@ notesRouter.post("/", authGuard, upload.single("file"), validate(noteSchema), as
 });
 
 notesRouter.post("/:id/purchase", authGuard, async (req, res) => {
-  const note = await prisma.note.findUnique({ where: { id: req.params.id } });
+  const noteId = String(req.params.id);
+  const note = await prisma.note.findUnique({ where: { id: noteId } });
   if (!note) {
     res.status(404).json({ message: "Note not found" });
     return;
@@ -58,7 +59,8 @@ notesRouter.post("/:id/purchase", authGuard, async (req, res) => {
 });
 
 notesRouter.get("/:id/download", authGuard, async (req, res) => {
-  const note = await prisma.note.findUnique({ where: { id: req.params.id } });
+  const noteId = String(req.params.id);
+  const note = await prisma.note.findUnique({ where: { id: noteId } });
   if (!note) {
     res.status(404).json({ message: "Note not found" });
     return;
@@ -67,9 +69,10 @@ notesRouter.get("/:id/download", authGuard, async (req, res) => {
 });
 
 notesRouter.post("/:id/ratings", authGuard, async (req, res) => {
+  const noteId = String(req.params.id);
   const rating = await prisma.noteRating.create({
     data: {
-      noteId: req.params.id,
+      noteId,
       studentId: req.user!.userId,
       rating: Number(req.body.rating ?? 5),
       comment: String(req.body.comment ?? "")

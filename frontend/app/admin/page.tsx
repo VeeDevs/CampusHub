@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AppShell } from "@/components/app-shell";
 import { API_URL } from "@/lib/api";
