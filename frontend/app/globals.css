@@ -1,0 +1,21 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f8fafc;
+  --fg: #0f172a;
+  --muted: #64748b;
+}
+
+body {
+  background: radial-gradient(circle at top right, #e0f2fe 0%, #f8fafc 45%, #eef2ff 100%);
+  color: var(--fg);
+  min-height: 100vh;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}

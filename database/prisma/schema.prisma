@@ -1,0 +1,271 @@
+﻿generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  student
+  business
+  admin
+}
+
+enum JobType {
+  part_time
+  full_time
+  internship
+  gig
+}
+
+enum ItemStatus {
+  available
+  sold
+  reserved
+}
+
+enum ApplicationStatus {
+  pending
+  reviewed
+  accepted
+  rejected
+}
+
+enum TransactionStatus {
+  pending
+  succeeded
+  failed
+}
+
+model User {
+  id            String           @id @default(cuid())
+  name          String
+  email         String           @unique
+  password      String
+  university    String
+  role          Role             @default(student)
+  avatar        String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  services      Service[]
+  notes         Note[]
+  jobs          Job[]
+  items         Item[]
+  applications  Application[]
+  postLikes     PostLike[]
+  posts         Post[]
+  comments      Comment[]
+  notifications Notification[]
+  purchases     NotePurchase[]
+  messages      Message[]
+  chatLinks     ChatParticipant[]
+  txBuy         Transaction[]    @relation("BuyerTx")
+  txSell        Transaction[]    @relation("SellerTx")
+  bookings      ServiceBooking[]
+  serviceReview ServiceReview[]
+  noteRatings   NoteRating[]
+}
+
+model Service {
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  category    String
+  sellerId    String
+  university  String
+  createdAt   DateTime         @default(now())
+  seller      User             @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  bookings    ServiceBooking[]
+  reviews     ServiceReview[]
+}
+
+model ServiceBooking {
+  id        String   @id @default(cuid())
+  serviceId String
+  studentId String
+  createdAt DateTime @default(now())
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model ServiceReview {
+  id        String   @id @default(cuid())
+  serviceId String
+  studentId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id         String         @id @default(cuid())
+  title      String
+  course     String
+  university String
+  price      Float
+  fileUrl    String
+  uploaderId String
+  downloads  Int            @default(0)
+  createdAt  DateTime       @default(now())
+  uploader   User           @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+  purchases  NotePurchase[]
+  ratings    NoteRating[]
+}
+
+model NotePurchase {
+  id        String   @id @default(cuid())
+  noteId    String
+  buyerId   String
+  createdAt DateTime @default(now())
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  buyer     User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+}
+
+model NoteRating {
+  id        String   @id @default(cuid())
+  noteId    String
+  studentId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id          String        @id @default(cuid())
+  title       String
+  company     String
+  description String
+  pay         Float
+  location    String
+  type        JobType
+  postedBy    String
+  createdAt   DateTime      @default(now())
+  poster      User          @relation(fields: [postedBy], references: [id], onDelete: Cascade)
+  applications Application[]
+}
+
+model Application {
+  id        String            @id @default(cuid())
+  jobId     String
+  studentId String
+  resumeUrl String
+  status    ApplicationStatus @default(pending)
+  createdAt DateTime          @default(now())
+  job       Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  student   User              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Item {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  category    String
+  sellerId    String
+  images      String[]
+  university  String
+  status      ItemStatus @default(available)
+  createdAt   DateTime   @default(now())
+  seller      User       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id           String            @id @default(cuid())
+  createdAt    DateTime          @default(now())
+  participants ChatParticipant[]
+  messages     Message[]
+}
+
+model ChatParticipant {
+  id      String @id @default(cuid())
+  chatId  String
+  userId  String
+  chat    Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  senderId  String
+  message   String
+  createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        String     @id @default(cuid())
+  authorId  String
+  content   String
+  image     String?
+  likes     Int        @default(0)
+  createdAt DateTime   @default(now())
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  likedBy   PostLike[]
+}
+
+model PostLike {
+  id     String @id @default(cuid())
+  postId String
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Deal {
+  id           String   @id @default(cuid())
+  businessName String
+  title        String
+  description  String
+  discount     String
+  location     String
+  expiryDate   DateTime
+  createdAt    DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id          String            @id @default(cuid())
+  buyerId     String
+  sellerId    String
+  amount      Float
+  type        String
+  status      TransactionStatus @default(pending)
+  platformFee Float             @default(0)
+  sellerNet   Float             @default(0)
+  createdAt   DateTime          @default(now())
+  buyer       User              @relation("BuyerTx", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller      User              @relation("SellerTx", fields: [sellerId], references: [id], onDelete: Cascade)
+}

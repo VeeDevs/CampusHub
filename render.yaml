@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: campushub-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate --schema ../database/prisma/schema.prisma && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BACKEND_PORT
+        value: 8080
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: PLATFORM_COMMISSION_RATE
+        value: 0.10
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false

@@ -1,0 +1,20 @@
+﻿{
+  "name": "campushub",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "setup": "npm install && npm run prisma:generate && npm run db:migrate && npm run seed",
+    "dev": "concurrently \"npm run dev --workspace frontend\" \"npm run dev --workspace backend\"",
+    "build": "npm run build --workspace frontend && npm run build --workspace backend",
+    "seed": "npm run seed --workspace backend",
+    "prisma:generate": "npm run prisma:generate --workspace backend",
+    "db:migrate": "npm run prisma:migrate --workspace backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
